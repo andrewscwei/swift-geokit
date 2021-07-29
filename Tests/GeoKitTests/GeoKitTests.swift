@@ -1,7 +1,7 @@
 import XCTest
 @testable import GeoKit
 
-final class GeoKitTests: XCTestCase {
+class GeoKitTests: XCTestCase {
   
   func testExample() {
     // This is an example of a functional test case.
