@@ -4,12 +4,14 @@ import CoreLocation
 
 extension CLLocationCoordinate2D {
 
-  /// Array representation of this `CLLocationCoordinate2D` in the format of `[longitude, latitude]`.
+  /// Array representation of this `CLLocationCoordinate2D` in the format of `[longitude,
+  /// latitude]`.
   public var arrayValue: [CLLocationDegrees] {
     return [self.longitude, self.latitude]
   }
 
-  /// Initializes a `CLLocationCoordinate2D` using an array representation of a 2D coordinate in the format of [longitude, latitude]`.
+  /// Initializes a `CLLocationCoordinate2D` using an array representation of a 2D coordinate in the
+  /// format of [longitude, latitude]`.
   ///
   /// - Parameters:
   ///   - arrayValue: Array representation of a 2D coordinate.
