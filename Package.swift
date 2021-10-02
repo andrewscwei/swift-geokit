@@ -26,6 +26,22 @@ enum Environment: String {
   }
 }
 
+var dependencies: [Package.Dependency] = [
+
+]
+
+switch Environment.get() {
+case .local:
+  dependencies.append(.package(path: "../BaseKit"))
+  dependencies.append(.package(path: "../ArcKit"))
+case .development:
+  dependencies.append(.package(name: "BaseKit", url: "git@github.com:sybl/swift-basekit", .branch("main")))
+  dependencies.append(.package(name: "ArcKit", url: "git@github.com:sybl/swift-arckit", .branch("main")))
+case .production:
+  dependencies.append(.package(name: "BaseKit", url: "git@github.com:sybl/swift-basekit", from: "0.11.0"))
+  dependencies.append(.package(name: "ArcKit", url: "git@github.com:sybl/swift-arckit", from: "0.1.0"))
+}
+
 let package = Package(
   name: "GeoKit",
   platforms: [.iOS(.v11)],
@@ -34,12 +50,11 @@ let package = Package(
       name: "GeoKit",
       targets: ["GeoKit"]),
   ],
-  dependencies: [
-  ],
+  dependencies: dependencies,
   targets: [
     .target(
       name: "GeoKit",
-      dependencies: []),
+      dependencies: ["BaseKit", "ArcKit"]),
     .testTarget(
       name: "GeoKitTests",
       dependencies: ["GeoKit"]),
