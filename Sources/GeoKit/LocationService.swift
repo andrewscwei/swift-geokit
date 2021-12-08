@@ -15,6 +15,9 @@ public class LocationService: NSObject, Observable {
 
   public typealias Observer = LocationServiceObserver
 
+  /// Specifies if debug mode is enabled (generating debug logs).
+  public var debugMode: Bool { false }
+
   /// The most recently retrieved device location.
   public var currentLocation: CLLocation? { manager?.location }
 
@@ -199,7 +202,7 @@ public class LocationService: NSObject, Observable {
 
     updateFrequency = newUpdateFrequency
 
-    log { "Configuring location update frequency... OK: \(newUpdateFrequency)" }
+    log(.debug, isEnabled: debugMode) { "Configuring location update frequency... OK: \(newUpdateFrequency)" }
   }
 
   /// Handler invoked when the most recent location update attempt has timed out.
@@ -244,7 +247,7 @@ extension LocationService: CLLocationManagerDelegate {
       self.currentPlacemark = placemark
     }
 
-    log { "Processing location update... OK: \(newLocation.coordinate)" }
+    log(.debug, isEnabled: debugMode) { "Processing location update... OK: \(newLocation.coordinate)" }
 
     notifyObservers {
       if isInBackground {
@@ -258,7 +261,7 @@ extension LocationService: CLLocationManagerDelegate {
   }
 
   public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-    log { "Processing heading update... OK: \(newHeading)" }
+    log(.debug, isEnabled: debugMode) { "Processing heading update... OK: \(newHeading)" }
 
     let isInBackground = UIApplication.shared.applicationState == .background
 
@@ -284,7 +287,7 @@ extension LocationService: CLLocationManagerDelegate {
   }
 
   public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-    log(.error) { "Processing location update... ERR: \(error.localizedDescription)" }
+    log(.error, isEnabled: debugMode) { "Processing location update... ERR: \(error.localizedDescription)" }
 
     notifyObservers { $0.locationService(self, locationUpdateDidFailWithError: error) }
   }
