@@ -1,4 +1,4 @@
-# GeoKit [![CircleCI](https://img.shields.io/circleci/build/github/sybl/swift-geokit/main?token=9393e78ceb9fa4d7a3eda99739b4243f850cf1a1)](https://circleci.com/gh/sybl/swift-geokit/tree/main)
+# GeoKit [![CI](https://github.com/sybl/swift-geokit/workflows/CI/badge.svg?branch=main)](https://github.com/sybl/swift-geokit/actions/workflows/ci.yml?query=branch%3Amain)
 
 ---
 
