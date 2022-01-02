@@ -35,11 +35,11 @@ case .local:
   dependencies.append(.package(path: "../BaseKit"))
   dependencies.append(.package(path: "../ArcKit"))
 case .development:
-  dependencies.append(.package(name: "BaseKit", url: "git@github.com:sybl/swift-basekit", .branch("main")))
-  dependencies.append(.package(name: "ArcKit", url: "git@github.com:sybl/swift-arckit", .branch("main")))
+  dependencies.append(.package(name: "BaseKit", url: "https://github.com/sybl/swift-basekit", .branch("main")))
+  dependencies.append(.package(name: "ArcKit", url: "https://github.com/sybl/swift-arckit", .branch("main")))
 case .production:
-  dependencies.append(.package(name: "BaseKit", url: "git@github.com:sybl/swift-basekit", from: "0.16.0"))
-  dependencies.append(.package(name: "ArcKit", url: "git@github.com:sybl/swift-arckit", from: "0.6.0"))
+  dependencies.append(.package(name: "BaseKit", url: "https://github.com/sybl/swift-basekit", from: "0.16.0"))
+  dependencies.append(.package(name: "ArcKit", url: "https://github.com/sybl/swift-arckit", from: "0.6.0"))
 }
 
 let package = Package(
