@@ -1,5 +1,14 @@
-# GeoKit [![CI](https://github.com/sybl/swift-geokit/workflows/CI/badge.svg?branch=main)](https://github.com/sybl/swift-geokit/actions/workflows/ci.yml?query=branch%3Amain)
+# GeoKit [![CI](https://github.com/0xGHOZT/swift-geokit/workflows/CI/badge.svg?branch=main)](https://github.com/0xGHOZT/swift-geokit/actions/workflows/ci.yml?query=branch%3Amain)
+
+## Setup
+
+```sh
+$ bundle install
+
+# Run tests
+$ bundle exec fastlane test
+```
 
 ---
 
-© Sybl
+© GHOZT

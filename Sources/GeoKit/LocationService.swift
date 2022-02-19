@@ -1,4 +1,4 @@
-// © Sybl
+// © GHOZT
 
 import ArcKit
 import BaseKit
@@ -86,7 +86,7 @@ public class LocationService: NSObject, Observable {
 
   public override init() {
     super.init()
-    
+
     self.manager = CLLocationManager()
     self.manager?.allowsBackgroundLocationUpdates = true
     self.manager?.pausesLocationUpdatesAutomatically = true

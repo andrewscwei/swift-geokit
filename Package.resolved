@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "ArcKit",
+        "repositoryURL": "https://github.com/0xGHOZT/swift-arckit",
+        "state": {
+          "branch": null,
+          "revision": "b91ff32593282705e9e73cdebd8c56e42221ade0",
+          "version": "0.7.0"
+        }
+      },
+      {
+        "package": "BaseKit",
+        "repositoryURL": "https://github.com/0xGHOZT/swift-basekit",
+        "state": {
+          "branch": null,
+          "revision": "7b79cf0e32f28419e9e931631455a0ca75daa856",
+          "version": "0.17.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
