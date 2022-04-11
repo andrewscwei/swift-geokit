@@ -5,7 +5,7 @@ import Foundation
 extension LocationService {
 
   /// User-granted authorization status of accessing the device's location.
-  public enum AuthorizationStatus: Comparable {
+  public enum AuthorizationStatus: Codable, Equatable, Comparable {
 
     // Permission is explicitly denied.
     case denied
