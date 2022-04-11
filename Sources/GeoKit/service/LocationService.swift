@@ -96,7 +96,10 @@ public class LocationService: NSObject, Observable {
 
   /// Requests for permission to access the device location. The authorization level to request for
   /// is automatically determined depending on the current authorization status.
-  public func requestAuthorization() {
+  ///
+  /// - Parameter failureHandler: Handler invoked when authorization cannot be requested by the
+  ///                             location manager.
+  public func requestAuthorization(failure failureHandler: @escaping (AuthorizationStatus) -> Void = { _ in }) {
     // Starting from iOS 13, location access becomes a bit more strict.
     if #available(iOS 13.0, *) {
       switch authorizationStatus {
@@ -107,7 +110,7 @@ public class LocationService: NSObject, Observable {
       case .denied:
         // When the status is explicitly denied by the user, the only way to change it is via
         // settings. Redirect the user.
-        DispatchQueue.main.async { self.openDeviceSettings() }
+        failureHandler(.denied)
       case .restricted:
         // When the status is restricted, meaning the user has only allowed for location access
         // while the app is in use, only then can we ask for a higher permission level, i.e.
@@ -119,7 +122,7 @@ public class LocationService: NSObject, Observable {
           hasAlreadyRequestedForAlwaysAuthorization = true
         }
         else {
-          DispatchQueue.main.async { self.openDeviceSettings() }
+          failureHandler(.restricted)
         }
       case .authorized:
         // Nothing to do here.
@@ -129,16 +132,10 @@ public class LocationService: NSObject, Observable {
     else {
       switch authorizationStatus {
       case .notDetermined, .restricted: manager?.requestAlwaysAuthorization()
-      case .denied: DispatchQueue.main.async { self.openDeviceSettings() }
+      case .denied: failureHandler(.denied)
       case .authorized: break
       }
     }
-  }
-
-  /// Navigates the user outside of the app to the device settings.
-  private func openDeviceSettings() {
-    guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-    UIApplication.shared.open(url)
   }
 
   /// Changes the current location update frequency.

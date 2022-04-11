@@ -1,8 +1,6 @@
 // © GHOZT
 
-import BaseKit
 import CoreLocation
-import Foundation
 
 /// An object conforming to this protocol becomes an observer of `LocationService`.
 public protocol LocationServiceObserver: AnyObject {

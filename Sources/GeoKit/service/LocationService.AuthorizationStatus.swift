@@ -1,7 +1,5 @@
 // © GHOZT
 
-import Foundation
-
 extension LocationService {
 
   /// User-granted authorization status of accessing the device's location.
