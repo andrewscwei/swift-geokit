@@ -210,7 +210,9 @@ public class LocationService: NSObject, Observable {
     timeoutTimer?.invalidate()
     timeoutTimer = nil
 
-    notifyObservers { $0.locationService(self, locationUpdateDidTimeoutAfter: locationUpdateTimeoutInterval) }
+    notifyObservers {
+      $0.locationService(self, locationUpdateDidTimeoutAfter: locationUpdateTimeoutInterval)
+    }
 
     switch updateFrequency {
     // If the update frequency is set to `once` and a timeout occurred, simply stop updating
@@ -283,12 +285,16 @@ extension LocationService: CLLocationManagerDelegate {
     default: break
     }
 
-    notifyObservers { $0.locationService(self, authorizationStatusDidChange: authorizationStatus) }
+    notifyObservers {
+      $0.locationService(self, authorizationStatusDidChange: authorizationStatus)
+    }
   }
 
   public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
     log(.error, isEnabled: debugMode) { "Processing location update... ERR: \(error.localizedDescription)" }
 
-    notifyObservers { $0.locationService(self, locationUpdateDidFailWithError: error) }
+    notifyObservers {
+      $0.locationService(self, locationUpdateDidFailWithError: error)
+    }
   }
 }

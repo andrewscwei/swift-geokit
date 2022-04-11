@@ -1,10 +1,11 @@
 // © GHOZT
 
-import Foundation
+import BaseKit
 import CoreLocation
+import Foundation
 
 /// An object conforming to this protocol becomes an observer of `LocationService`.
-public protocol LocationServiceObserver {
+public protocol LocationServiceObserver: AnyObject {
 
   /// Method invoked when the device location is changed. This can occur while the application is
   /// running in the background.
