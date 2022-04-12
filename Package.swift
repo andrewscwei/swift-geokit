@@ -39,7 +39,7 @@ case .development:
   dependencies.append(.package(name: "ArcKit", url: "https://github.com/0xGHOZT/swift-arckit", .branch("master")))
 case .production:
   dependencies.append(.package(name: "BaseKit", url: "https://github.com/0xGHOZT/swift-basekit", from: "0.18.0"))
-  dependencies.append(.package(name: "ArcKit", url: "https://github.com/0xGHOZT/swift-arckit", from: "0.11.0"))
+  dependencies.append(.package(name: "ArcKit", url: "https://github.com/0xGHOZT/swift-arckit", from: "0.13.0"))
 }
 
 let package = Package(
