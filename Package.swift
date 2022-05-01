@@ -38,8 +38,8 @@ case .development:
   dependencies.append(.package(name: "BaseKit", url: "https://github.com/0xGHOZT/swift-basekit", .branch("master")))
   dependencies.append(.package(name: "ArcKit", url: "https://github.com/0xGHOZT/swift-arckit", .branch("master")))
 case .production:
-  dependencies.append(.package(name: "BaseKit", url: "https://github.com/0xGHOZT/swift-basekit", from: "0.19.0"))
-  dependencies.append(.package(name: "ArcKit", url: "https://github.com/0xGHOZT/swift-arckit", from: "0.14.0"))
+  dependencies.append(.package(name: "BaseKit", url: "https://github.com/0xGHOZT/swift-basekit", from: "0.20.0"))
+  dependencies.append(.package(name: "ArcKit", url: "https://github.com/0xGHOZT/swift-arckit", from: "0.15.0"))
 }
 
 let package = Package(
