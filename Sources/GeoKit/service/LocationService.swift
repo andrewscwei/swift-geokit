@@ -199,7 +199,7 @@ public class LocationService: NSObject, Observable {
 
     updateFrequency = newUpdateFrequency
 
-    log(.debug, isEnabled: debugMode) { "Configuring location update frequency... OK: \(newUpdateFrequency)" }
+    log(.debug, isEnabled: debugMode) { "Setting location update frequency... OK: \(newUpdateFrequency)" }
   }
 
   /// Handler invoked when the most recent location update attempt has timed out.
