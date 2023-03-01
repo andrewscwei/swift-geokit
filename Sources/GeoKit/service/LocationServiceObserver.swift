@@ -2,30 +2,32 @@
 
 import CoreLocation
 
-/// An object conforming to this protocol becomes an observer of `LocationService`.
+/// An object conforming to this protocol becomes an observer of
+/// `LocationService`.
 public protocol LocationServiceObserver: AnyObject {
 
-  /// Method invoked when the device location is changed. This can occur while the application is
-  /// running in the background.
+  /// Method invoked when the device location is changed. This can occur while
+  /// the application is running in the background.
   ///
   /// - Parameters:
   ///   - service: The `LocationService` instance that invoked this method.
   ///   - newLocation: The new location.
-  ///   - inBackground: Indicates if the location change occurred while the application is running
-  ///                   in the background.
+  ///   - inBackground: Indicates if the location change occurred while the
+  ///                   application is running in the background.
   func locationService(_ service: LocationService, locationDidChange newLocation: CLLocation, inBackground: Bool)
 
-  /// Method invoked when the device heading is change. This can occur while the application is
-  /// running in the background.
+  /// Method invoked when the device heading is change. This can occur while the
+  /// application is running in the background.
   ///
   /// - Parameters:
-  ///   - service: The `LocationService` isntance that invoked this method.
+  ///   - service: The `LocationService` instance that invoked this method.
   ///   - newHeading: The new heading.
-  ///   - inBackground: Indicates if the heading change occurred while the application is running in
-  ///                   the background.
+  ///   - inBackground: Indicates if the heading change occurred while the
+  ///                   application is running in the background.
   func locationService(_ service: LocationService, headingDidChange newHeading: CLHeading, inBackground: Bool)
 
-  /// Method invoked when an attempt to fetch the current device location times out.
+  /// Method invoked when an attempt to fetch the current device location times
+  /// out.
   ///
   /// - Parameters:
   ///   - service: The `LocationService` instance that invoked this method.

@@ -5,9 +5,10 @@ import BaseKit
 import CoreLocation
 import UIKit
 
-/// Provides access to and manages device location data. Certain operations may run in the
-/// background (if specified to do so) even when the app is terminated (i.e. to periodically fetch
-/// location updates given that device location access permissions allow).
+/// Provides access to and manages device location data. Certain operations may
+/// run in the background (if specified to do so) even when the app is
+/// terminated (i.e. to periodically fetch location updates given that device
+/// location access permissions allow).
 ///
 /// - SeeAlso:
 ///   https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/LocationBestPractices.html#//apple_ref/doc/uid/TP40015243-CH24-SW1
@@ -36,15 +37,18 @@ public class LocationService: NSObject, Observable {
     return nil
   }
 
-  /// The minimum distance (in meters) a device must travel before an imprecise location update
-  /// event is generated (i.e. when the update frequency is set to `loosely`).
+  /// The minimum distance (in meters) a device must travel before an imprecise
+  /// location update event is generated (i.e. when the update frequency is set
+  /// to `loosely`).
   public var impreciseDistanceFilter: CLLocationDistance = 50.0
 
-  /// The minimum distance (in meters) a device must travel before a precise location update event
-  /// is generated (i.e. when the update frequency is set to `always`).
+  /// The minimum distance (in meters) a device must travel before a precise
+  /// location update event is generated (i.e. when the update frequency is set
+  /// to `always`).
   public var preciseDistanceFilter: CLLocationDistance = 20.0
 
-  /// Specifies how long it takes (in seconds) before a location update attempt times out.
+  /// Specifies how long it takes (in seconds) before a location update attempt
+  /// times out.
   public var locationUpdateTimeoutInterval: TimeInterval = 1.0
 
   /// Gets the current device location access authorization status.
@@ -66,8 +70,8 @@ public class LocationService: NSObject, Observable {
     }
   }
 
-  /// Indicates if user has already requested for "Always" authorization (meaning that it subsequent
-  /// requests will be ignored).
+  /// Indicates if user has already requested for "Always" authorization
+  /// (meaning that it subsequent requests will be ignored).
   @UserDefault("hasAlreadyRequestedForAlwaysAuthorization", default: false)
   public private(set) var hasAlreadyRequestedForAlwaysAuthorization: Bool
 
@@ -80,8 +84,8 @@ public class LocationService: NSObject, Observable {
   /// Timer for tracking location request timeouts.
   private var timeoutTimer: Timer?
 
-  /// Placemark instance used for determining the phone number region code of the device's current
-  /// location.
+  /// Placemark instance used for determining the phone number region code of
+  /// the device's current location.
   public private(set) var currentPlacemark: CLPlacemark?
 
   public override init() {
@@ -94,28 +98,31 @@ public class LocationService: NSObject, Observable {
     self.manager?.delegate = self
   }
 
-  /// Requests for permission to access the device location. The authorization level to request for
-  /// is automatically determined depending on the current authorization status.
+  /// Requests for permission to access the device location. The authorization
+  /// level to request for is automatically determined depending on the current
+  /// authorization status.
   ///
-  /// - Parameter failureHandler: Handler invoked when authorization cannot be requested by the
-  ///                             location manager.
+  /// - Parameter failureHandler: Handler invoked when authorization cannot be
+  ///                             requested by the location manager.
   public func requestAuthorization(failure failureHandler: @escaping (AuthorizationStatus) -> Void = { _ in }) {
     // Starting from iOS 13, location access becomes a bit more strict.
     if #available(iOS 13.0, *) {
       switch authorizationStatus {
       case .notDetermined:
-        // When the status is not determined, request for a less invasive location access
-        // permission, i.e. user can decide to at most allow location access while using the app.
+        // When the status is not determined, request for a less invasive
+        // location access permission, i.e. user can decide to at most allow
+        // location access while using the app.
         manager?.requestWhenInUseAuthorization()
       case .denied:
-        // When the status is explicitly denied by the user, the only way to change it is via
-        // settings. Redirect the user.
+        // When the status is explicitly denied by the user, the only way to
+        // change it is via settings. Redirect the user.
         failureHandler(.denied)
       case .restricted:
-        // When the status is restricted, meaning the user has only allowed for location access
-        // while the app is in use, only then can we ask for a higher permission level, i.e.
-        // granting location access even when the app is in the background. Note that if this status
-        // is a result of the user allowing location access just once, the following method does
+        // When the status is restricted, meaning the user has only allowed for
+        // location access while the app is in use, only then can we ask for a
+        // higher permission level, i.e. granting location access even when the
+        // app is in the background. Note that if this status is a result of the
+        // user allowing location access just once, the following method does
         // nothing.
         if !hasAlreadyRequestedForAlwaysAuthorization {
           manager?.requestAlwaysAuthorization()
@@ -145,8 +152,8 @@ public class LocationService: NSObject, Observable {
   public func changeUpdateFrequency(_ newUpdateFrequency: UpdateFrequency) {
     let authorizationStatus = self.authorizationStatus
 
-    // Deactivate `LocationService` if authorization status is not allowed or if update frequency is
-    // set to `never`.
+    // Deactivate `LocationService` if authorization status is not allowed or if
+    // update frequency is set to `never`.
     guard authorizationStatus == .authorized || authorizationStatus == .restricted, newUpdateFrequency != .never else {
       timeoutTimer?.invalidate()
       timeoutTimer = nil
@@ -156,8 +163,8 @@ public class LocationService: NSObject, Observable {
       return
     }
 
-    // Ignore if frequency did not change unless the new frequency is `background`, which requires
-    // special attention.
+    // Ignore if frequency did not change unless the new frequency is
+    // `background`, which requires special attention.
     guard newUpdateFrequency != updateFrequency || newUpdateFrequency == .background else { return }
 
     manager?.stopUpdatingHeading()
@@ -212,12 +219,12 @@ public class LocationService: NSObject, Observable {
     }
 
     switch updateFrequency {
-    // If the update frequency is set to `once` and a timeout occurred, simply stop updating
-    // location.
+    // If the update frequency is set to `once` and a timeout occurred, simply
+    // stop updating location.
     case .once:
       changeUpdateFrequency(.never)
-    // If the update frequency is continuous and a timeout occurred, prepare to capture the next
-    // update timeout.
+    // If the update frequency is continuous and a timeout occurred, prepare to
+    // capture the next update timeout.
     case .loosely,
          .always:
       timeoutTimer = Timer.scheduledTimer(timeInterval: locationUpdateTimeoutInterval, target: self, selector: #selector(locationUpdateDidTimeout), userInfo: nil, repeats: false)

@@ -8,12 +8,12 @@ extension LocationService {
     // Permission is explicitly denied.
     case denied
 
-    // User has not been prompted for granting permission yet, or user previously selected "Allow
-    // Once" and this is a subsequent app session.
+    // User has not been prompted for granting permission yet, or user
+    // previously selected "Allow Once" and this is a subsequent app session.
     case notDetermined
 
-    // Permission is only granted when the app is in use, or when the user selected "Allow Once" in
-    // this app session.
+    // Permission is only granted when the app is in use, or when the user
+    // selected "Allow Once" in this app session.
     case restricted
 
     // Permission is granted even for background access ("Always Allow").
