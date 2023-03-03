@@ -102,8 +102,9 @@ public class LocationService: NSObject, Observable {
   /// level to request for is automatically determined depending on the current
   /// authorization status.
   ///
-  /// - Parameter failureHandler: Handler invoked when authorization cannot be
-  ///                             requested by the location manager.
+  /// - Parameters:
+  ///   - failureHandler: Handler invoked when authorization cannot be requested
+  ///                     by the location manager.
   public func requestAuthorization(failure failureHandler: @escaping (AuthorizationStatus) -> Void = { _ in }) {
     // Starting from iOS 13, location access becomes a bit more strict.
     if #available(iOS 13.0, *) {
