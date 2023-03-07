@@ -24,3 +24,26 @@ extension CLLocationCoordinate2D {
     self.init(latitude: latitude, longitude: longitude)
   }
 }
+
+extension CLLocationCoordinate2D: Equatable {
+
+  public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+    return lhs.arrayValue == rhs.arrayValue
+  }
+}
+
+extension CLLocationCoordinate2D: Codable {
+
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    let arrayValue = try container.decode([CLLocationDegrees].self)
+
+    self = .init(latitude: arrayValue[1], longitude: arrayValue[0])
+  }
+
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.singleValueContainer()
+
+    try container.encode(arrayValue)
+  }
+}
