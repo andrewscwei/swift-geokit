@@ -4,6 +4,7 @@ import ArcKit
 import BaseKit
 import CoreLocation
 import UIKit
+import UXKit
 
 /// Provides access to and manages device location data. Certain operations may
 /// run in the background (if specified to do so) even when the app is

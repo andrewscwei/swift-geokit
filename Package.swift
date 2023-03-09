@@ -34,12 +34,15 @@ switch Environment.get() {
 case .local:
   dependencies.append(.package(path: "../BaseKit"))
   dependencies.append(.package(path: "../ArcKit"))
+  dependencies.append(.package(path: "../UXKit"))
 case .development:
   dependencies.append(.package(name: "BaseKit", url: "https://github.com/0xGHOZT/swift-basekit", .branch("master")))
   dependencies.append(.package(name: "ArcKit", url: "https://github.com/0xGHOZT/swift-arckit", .branch("master")))
+  dependencies.append(.package(name: "UXKit", url: "https://github.com/0xGHOZT/swift-uxkit", .branch("master")))
 case .production:
   dependencies.append(.package(name: "BaseKit", url: "https://github.com/0xGHOZT/swift-basekit", from: "0.24.0"))
   dependencies.append(.package(name: "ArcKit", url: "https://github.com/0xGHOZT/swift-arckit", from: "0.21.0"))
+  dependencies.append(.package(name: "UXKit", url: "https://github.com/0xGHOZT/swift-uxkit", from: "0.23.0"))
 }
 
 let package = Package(
@@ -54,7 +57,7 @@ let package = Package(
   targets: [
     .target(
       name: "GeoKit",
-      dependencies: ["BaseKit", "ArcKit"]),
+      dependencies: ["BaseKit", "ArcKit", "UXKit"]),
     .testTarget(
       name: "GeoKitTests",
       dependencies: ["GeoKit"]),
