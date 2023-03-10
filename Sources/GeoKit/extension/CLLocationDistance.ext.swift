@@ -4,7 +4,6 @@ import CoreLocation
 import MapKit
 
 extension CLLocationDistance {
-
   /// String representation of this distance.
   public var stringValue: String {
     let formatter = MKDistanceFormatter()

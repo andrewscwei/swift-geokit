@@ -4,7 +4,6 @@ extension LocationService {
 
   /// Indicates how frequent the device location updates.
   public enum UpdateFrequency: Comparable {
-
     /// The `LocationService` instance becomes inactive immediately and
     /// terminates any existing location update attempts.
     case never

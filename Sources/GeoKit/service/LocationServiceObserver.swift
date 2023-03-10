@@ -5,7 +5,6 @@ import CoreLocation
 /// An object conforming to this protocol becomes an observer of
 /// `LocationService`.
 public protocol LocationServiceObserver: AnyObject {
-
   /// Method invoked when the device location is changed. This can occur while
   /// the application is running in the background.
   ///
@@ -50,7 +49,6 @@ public protocol LocationServiceObserver: AnyObject {
 }
 
 extension LocationServiceObserver {
-
   public func locationService(_ service: LocationService, locationDidChange newLocation: CLLocation, inBackground: Bool) {}
 
   public func locationService(_ service: LocationService, headingDidChange newHeading: CLHeading, inBackground: Bool) {}

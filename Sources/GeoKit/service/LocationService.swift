@@ -14,7 +14,6 @@ import UXKit
 /// - SeeAlso:
 ///   https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/LocationBestPractices.html#//apple_ref/doc/uid/TP40015243-CH24-SW1
 public class LocationService: NSObject, Observable {
-
   public typealias Observer = LocationServiceObserver
 
   /// Specifies if debug mode is enabled (generating debug logs).
@@ -237,7 +236,6 @@ public class LocationService: NSObject, Observable {
 }
 
 extension LocationService: CLLocationManagerDelegate {
-
   public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     guard let newLocation = locations.last else { return }
 

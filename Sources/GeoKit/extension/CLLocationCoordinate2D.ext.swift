@@ -3,7 +3,6 @@
 import CoreLocation
 
 extension CLLocationCoordinate2D {
-
   /// Array representation of this `CLLocationCoordinate2D` in the format of
   /// `[longitude, latitude]`.
   public var arrayValue: [CLLocationDegrees] {
@@ -26,14 +25,12 @@ extension CLLocationCoordinate2D {
 }
 
 extension CLLocationCoordinate2D: Equatable {
-
   public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
     return lhs.arrayValue == rhs.arrayValue
   }
 }
 
 extension CLLocationCoordinate2D: Codable {
-
   public init(from decoder: Decoder) throws {
     let container = try decoder.singleValueContainer()
     let arrayValue = try container.decode([CLLocationDegrees].self)
