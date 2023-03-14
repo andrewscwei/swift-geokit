@@ -1,10 +1,8 @@
 // © GHOZT
 
-import ArcKit
 import BaseKit
 import CoreLocation
 import UIKit
-import UXKit
 
 /// Provides access to and manages device location data. Certain operations may
 /// run in the background (if specified to do so) even when the app is
@@ -72,8 +70,15 @@ public class LocationService: NSObject, Observable {
 
   /// Indicates if user has already requested for "Always" authorization
   /// (meaning that it subsequent requests will be ignored).
-  @UserDefault("hasAlreadyRequestedForAlwaysAuthorization", default: false)
-  public private(set) var hasAlreadyRequestedForAlwaysAuthorization: Bool
+  public private(set) var hasAlreadyRequestedForAlwaysAuthorization: Bool {
+    get {
+      UserDefaults.standard.bool(forKey: "hasAlreadyRequestedForAlwaysAuthorization")
+    }
+
+    set {
+      UserDefaults.standard.set(newValue, forKey: "hasAlreadyRequestedForAlwaysAuthorization")
+    }
+  }
 
   /// Internal `CLLocationManager` instance.
   private var manager: CLLocationManager?
@@ -257,7 +262,6 @@ extension LocationService: CLLocationManagerDelegate {
 
     notifyObservers {
       if isInBackground {
-        guard $0 is BackgroundService else { return }
         $0.locationService(self, locationDidChange: newLocation, inBackground: true)
       }
       else {
@@ -273,7 +277,6 @@ extension LocationService: CLLocationManagerDelegate {
 
     notifyObservers {
       if isInBackground {
-        guard $0 is BackgroundService else { return }
         $0.locationService(self, headingDidChange: newHeading, inBackground: true)
       }
       else {
