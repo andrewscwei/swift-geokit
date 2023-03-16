@@ -70,13 +70,13 @@ public class LocationService: NSObject, Observable {
 
   /// Indicates if user has already requested for "Always" authorization
   /// (meaning that it subsequent requests will be ignored).
-  public private(set) var hasAlreadyRequestedForAlwaysAuthorization: Bool {
+  public private(set) var hasAlreadyRequestedForBackgroundAuthorization: Bool {
     get {
-      UserDefaults.standard.bool(forKey: "hasAlreadyRequestedForAlwaysAuthorization")
+      UserDefaults.standard.bool(forKey: "hasAlreadyRequestedForBackgroundAuthorization")
     }
 
     set {
-      UserDefaults.standard.set(newValue, forKey: "hasAlreadyRequestedForAlwaysAuthorization")
+      UserDefaults.standard.set(newValue, forKey: "hasAlreadyRequestedForBackgroundAuthorization")
     }
   }
 
@@ -130,9 +130,9 @@ public class LocationService: NSObject, Observable {
         // app is in the background. Note that if this status is a result of the
         // user allowing location access just once, the following method does
         // nothing.
-        if !hasAlreadyRequestedForAlwaysAuthorization {
+        if !hasAlreadyRequestedForBackgroundAuthorization {
           manager?.requestAlwaysAuthorization()
-          hasAlreadyRequestedForAlwaysAuthorization = true
+          hasAlreadyRequestedForBackgroundAuthorization = true
         }
         else {
           failureHandler(.restricted)
@@ -288,7 +288,7 @@ extension LocationService: CLLocationManagerDelegate {
   public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
     switch status {
     case .notDetermined:
-      hasAlreadyRequestedForAlwaysAuthorization = false
+      hasAlreadyRequestedForBackgroundAuthorization = false
     default: break
     }
 
