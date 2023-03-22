@@ -41,7 +41,7 @@ case .production:
 
 let package = Package(
   name: "GeoKit",
-  platforms: [.iOS(.v11)],
+  platforms: [.iOS(.v14)],
   products: [
     .library(
       name: "GeoKit",
