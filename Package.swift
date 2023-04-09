@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.5
 
 import PackageDescription
 
@@ -41,7 +41,7 @@ case .production:
 
 let package = Package(
   name: "GeoKit",
-  platforms: [.iOS(.v14)],
+  platforms: [.iOS(.v15)],
   products: [
     .library(
       name: "GeoKit",
