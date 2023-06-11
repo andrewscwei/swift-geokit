@@ -51,14 +51,14 @@ public class LocationService: NSObject, Observable {
 
   /// Gets the current device location access authorization status.
   public var authorizationStatus: AuthorizationStatus {
-    let status = CLLocationManager.authorizationStatus()
+    let status = manager?.authorizationStatus
 
     switch status {
     case .authorizedAlways:
       return .authorized
     case .authorizedWhenInUse:
       return .restricted
-    case .notDetermined:
+    case .notDetermined, .none:
       return .notDetermined
     case .restricted,
          .denied:
