@@ -1,6 +1,5 @@
 // © GHOZT
 
-import BaseKit
 import CoreLocation
 import UIKit
 
@@ -8,15 +7,10 @@ import UIKit
 /// run in the background (if specified to do so) even when the app is
 /// terminated (i.e. to periodically fetch location updates given that device
 /// location access permissions allow).
-///
+/// 
 /// - SeeAlso:
 ///   https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/LocationBestPractices.html#//apple_ref/doc/uid/TP40015243-CH24-SW1
-public class LocationService: NSObject, Observable {
-  public typealias Observer = LocationServiceObserver
-
-  /// Specifies if debug mode is enabled (generating debug logs).
-  public var debugMode: Bool { false }
-
+public class LocationService: NSObject {
   /// The most recently retrieved device location.
   public var currentLocation: CLLocation? { manager?.location }
 
@@ -80,18 +74,16 @@ public class LocationService: NSObject, Observable {
     }
   }
 
-  /// Internal `CLLocationManager` instance.
-  private var manager: CLLocationManager?
-
   /// The current location update frequency.
   public private(set) var updateFrequency: UpdateFrequency = .never
-
-  /// Timer for tracking location request timeouts.
-  private var timeoutTimer: Timer?
 
   /// Placemark instance used for determining the phone number region code of
   /// the device's current location.
   public private(set) var currentPlacemark: CLPlacemark?
+
+  private var manager: CLLocationManager?
+  private var observers: [WeakReference<LocationServiceObserver>] = []
+  private var timeoutTimer: Timer?
 
   public override init() {
     super.init()
@@ -211,8 +203,35 @@ public class LocationService: NSObject, Observable {
     }
 
     updateFrequency = newUpdateFrequency
+  }
+  
+  /// Registers an observer.
+  ///
+  /// - Parameters:
+  ///   - observer: The observer to add.
+  public func addObserver(_ observer: LocationServiceObserver) {
+    observers = observers.filter { $0.get() as AnyObject !== observer as AnyObject } + [WeakReference(observer)]
+  }
+  
+  /// Unregisters an existing observer.
+  ///
+  /// - Parameters:
+  ///   - observer: The observer to remove.
+  public func removeObserver(_ observer: LocationServiceObserver) {
+    observers = observers.filter { $0.get() as AnyObject !== observer as AnyObject }
+  }
 
-    log(.info) { "Setting location update frequency... OK: \(newUpdateFrequency)" }
+
+  /// Iteratively executes a block on each reigstered observer.
+  ///
+  /// - Parameters:
+  ///   - iteratee: The block to execute with each registered observer as the
+  ///               parameter.
+  private func notifyObservers(iteratee: (LocationServiceObserver) -> Void) {
+    for o in observers {
+      guard let observer = o.get() else { continue }
+      iteratee(observer)
+    }
   }
 
   /// Handler invoked when the most recent location update attempt has timed out.
@@ -258,8 +277,6 @@ extension LocationService: CLLocationManagerDelegate {
       self.currentPlacemark = placemark
     }
 
-    log(.debug, isEnabled: debugMode) { "Processing location update... OK: \(newLocation.coordinate)" }
-
     notifyObservers {
       if isInBackground {
         $0.locationService(self, locationDidChange: newLocation, inBackground: true)
@@ -271,8 +288,6 @@ extension LocationService: CLLocationManagerDelegate {
   }
 
   public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-    log(.debug, isEnabled: debugMode) { "Processing heading update... OK: \(newHeading)" }
-
     let isInBackground = UIApplication.shared.applicationState == .background
 
     notifyObservers {
@@ -298,8 +313,6 @@ extension LocationService: CLLocationManagerDelegate {
   }
 
   public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-    log(.error, isEnabled: debugMode) { "Processing location update... ERR: \(error.localizedDescription)" }
-
     notifyObservers {
       $0.locationService(self, locationUpdateDidFailWithError: error)
     }

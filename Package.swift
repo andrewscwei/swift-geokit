@@ -26,19 +26,6 @@ enum Environment: String {
   }
 }
 
-var dependencies: [Package.Dependency] = [
-
-]
-
-switch Environment.get() {
-case .local:
-  dependencies.append(.package(path: "../BaseKit"))
-case .development:
-  dependencies.append(.package(name: "BaseKit", url: "https://github.com/ghoztsys/swift-basekit", .branch("master")))
-case .production:
-  dependencies.append(.package(name: "BaseKit", url: "https://github.com/ghoztsys/swift-basekit", from: "0.30.0"))
-}
-
 let package = Package(
   name: "GeoKit",
   platforms: [.iOS(.v15)],
@@ -47,11 +34,11 @@ let package = Package(
       name: "GeoKit",
       targets: ["GeoKit"]),
   ],
-  dependencies: dependencies,
+  dependencies: [],
   targets: [
     .target(
       name: "GeoKit",
-      dependencies: ["BaseKit"]),
+      dependencies: []),
     .testTarget(
       name: "GeoKitTests",
       dependencies: ["GeoKit"]),
