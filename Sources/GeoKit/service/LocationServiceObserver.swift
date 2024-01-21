@@ -11,9 +11,7 @@ public protocol LocationServiceObserver: AnyObject {
   /// - Parameters:
   ///   - service: The `LocationService` instance that invoked this method.
   ///   - newLocation: The new location.
-  ///   - inBackground: Indicates if the location change occurred while the
-  ///                   application is running in the background.
-  func locationService(_ service: LocationService, locationDidChange newLocation: CLLocation, inBackground: Bool)
+  func locationService(_ service: LocationService, locationDidChange newLocation: CLLocation)
 
   /// Method invoked when the device heading is change. This can occur while the
   /// application is running in the background.
@@ -21,9 +19,7 @@ public protocol LocationServiceObserver: AnyObject {
   /// - Parameters:
   ///   - service: The `LocationService` instance that invoked this method.
   ///   - newHeading: The new heading.
-  ///   - inBackground: Indicates if the heading change occurred while the
-  ///                   application is running in the background.
-  func locationService(_ service: LocationService, headingDidChange newHeading: CLHeading, inBackground: Bool)
+  func locationService(_ service: LocationService, headingDidChange newHeading: CLHeading)
 
   /// Method invoked when an attempt to fetch the current device location times
   /// out.
@@ -49,9 +45,9 @@ public protocol LocationServiceObserver: AnyObject {
 }
 
 extension LocationServiceObserver {
-  public func locationService(_ service: LocationService, locationDidChange newLocation: CLLocation, inBackground: Bool) {}
+  public func locationService(_ service: LocationService, locationDidChange newLocation: CLLocation) {}
 
-  public func locationService(_ service: LocationService, headingDidChange newHeading: CLHeading, inBackground: Bool) {}
+  public func locationService(_ service: LocationService, headingDidChange newHeading: CLHeading) {}
 
   public func locationService(_ service: LocationService, locationUpdateDidTimeoutAfter timeout: TimeInterval) {}
 

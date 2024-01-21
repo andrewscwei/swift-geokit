@@ -1,7 +1,6 @@
 // © GHOZT
 
 import CoreLocation
-import UIKit
 
 /// Provides access to and manages device location data. Certain operations may
 /// run in the background (if specified to do so) even when the app is
@@ -165,7 +164,10 @@ public class LocationService: NSObject {
     // `background`, which requires special attention.
     guard newUpdateFrequency != updateFrequency || newUpdateFrequency == .background else { return }
 
+#if os(iOS) || os(watchOS)
     manager?.stopUpdatingHeading()
+#endif
+
     manager?.stopUpdatingLocation()
     manager?.stopMonitoringSignificantLocationChanges()
 
@@ -263,8 +265,6 @@ extension LocationService: CLLocationManagerDelegate {
   public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     guard let newLocation = locations.last else { return }
 
-    let isInBackground = UIApplication.shared.applicationState == .background
-
     switch updateFrequency {
     case .once:
       changeUpdateFrequency(.never)
@@ -278,25 +278,13 @@ extension LocationService: CLLocationManagerDelegate {
     }
 
     notifyObservers {
-      if isInBackground {
-        $0.locationService(self, locationDidChange: newLocation, inBackground: true)
-      }
-      else {
-        $0.locationService(self, locationDidChange: newLocation, inBackground: false)
-      }
+      $0.locationService(self, locationDidChange: newLocation)
     }
   }
 
   public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-    let isInBackground = UIApplication.shared.applicationState == .background
-
     notifyObservers {
-      if isInBackground {
-        $0.locationService(self, headingDidChange: newHeading, inBackground: true)
-      }
-      else {
-        $0.locationService(self, headingDidChange: newHeading, inBackground: false)
-      }
+      $0.locationService(self, headingDidChange: newHeading)
     }
   }
 
