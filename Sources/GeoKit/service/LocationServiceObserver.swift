@@ -1,5 +1,3 @@
-// © GHOZT
-
 import CoreLocation
 
 /// An object conforming to this protocol becomes an observer of

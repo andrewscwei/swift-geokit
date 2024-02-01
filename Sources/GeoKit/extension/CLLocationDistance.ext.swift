@@ -1,5 +1,3 @@
-// © GHOZT
-
 import CoreLocation
 import MapKit
 

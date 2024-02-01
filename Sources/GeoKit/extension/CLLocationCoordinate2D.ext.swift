@@ -1,5 +1,3 @@
-// © GHOZT
-
 import CoreLocation
 
 extension CLLocationCoordinate2D {

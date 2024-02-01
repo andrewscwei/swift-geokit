@@ -1,5 +1,3 @@
-// © GHOZT
-
 extension LocationService {
 
   /// Indicates how frequent the device location updates.

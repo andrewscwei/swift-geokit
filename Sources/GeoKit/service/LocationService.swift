@@ -1,12 +1,10 @@
-// © GHOZT
-
 import CoreLocation
 
 /// Provides access to and manages device location data. Certain operations may
 /// run in the background (if specified to do so) even when the app is
 /// terminated (i.e. to periodically fetch location updates given that device
 /// location access permissions allow).
-/// 
+///
 /// - SeeAlso:
 ///   https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/LocationBestPractices.html#//apple_ref/doc/uid/TP40015243-CH24-SW1
 public class LocationService: NSObject {
@@ -206,7 +204,7 @@ public class LocationService: NSObject {
 
     updateFrequency = newUpdateFrequency
   }
-  
+
   /// Registers an observer.
   ///
   /// - Parameters:
@@ -214,7 +212,7 @@ public class LocationService: NSObject {
   public func addObserver(_ observer: LocationServiceObserver) {
     observers = observers.filter { $0.get() as AnyObject !== observer as AnyObject } + [WeakReference(observer)]
   }
-  
+
   /// Unregisters an existing observer.
   ///
   /// - Parameters:
