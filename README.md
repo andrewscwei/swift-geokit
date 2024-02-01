@@ -1,4 +1,4 @@
-# GeoKit [![CI](https://github.com/andrewscwei/swift-geokit/workflows/CI/badge.svg?branch=master)](https://github.com/andrewscwei/swift-geokit/actions/workflows/ci.yml?query=branch%3Amaster) [![CD](https://github.com/andrewscwei/swift-geokit/workflows/CD/badge.svg?branch=master)](https://github.com/andrewscwei/swift-geokit/actions/workflows/cd.yml?query=branch%3Amaster)
+# GeoKit [![CI](https://github.com/andrewscwei/swift-geokit/workflows/CI/badge.svg)](https://github.com/andrewscwei/swift-geokit/actions/workflows/ci.yml) [![CD](https://github.com/andrewscwei/swift-geokit/workflows/CD/badge.svg)](https://github.com/andrewscwei/swift-geokit/actions/workflows/cd.yml)
 
 ## Setup
 
