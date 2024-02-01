@@ -6,11 +6,11 @@ platform :ios do
     setup_ci if ENV['CI']
   end
 
-  desc "Run tests"
+  desc "Test"
   lane :test do
     scan(
       package_path: './',
-      destination: 'platform=iOS Simulator,name=iPhone 15 Pro',
+      destination: 'platform=iOS Simulator,name=iPhone 14 Pro',
       scheme: "GeoKit",
       code_coverage: true,
       result_bundle: true
