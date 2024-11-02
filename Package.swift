@@ -12,13 +12,13 @@ let package = Package(
   name: "GeoKit",
   platforms: [
     .macOS(.v12),
-    .iOS(.v15)
+    .iOS(.v15),
   ],
   products: [
     .library(
       name: "GeoKit",
       targets: [
-        "GeoKit"
+        "GeoKit",
       ]),
   ],
   targets: [
@@ -29,7 +29,7 @@ let package = Package(
     .testTarget(
       name: "GeoKitTests",
       dependencies: [
-        "GeoKit"
+        "GeoKit",
       ],
       path: "Tests"
     ),
