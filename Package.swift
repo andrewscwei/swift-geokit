@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:6.0
 
 import PackageDescription
 
@@ -8,39 +8,30 @@ import Glibc
 import Darwin.C
 #endif
 
-enum Environment: String {
-  case local
-  case development
-  case production
-
-  static func get() -> Environment {
-    if let envPointer = getenv("SWIFT_ENV"), let environment = Environment(rawValue: String(cString: envPointer)) {
-      return environment
-    }
-    else if let envPointer = getenv("CI"), String(cString: envPointer) == "true" {
-      return .production
-    }
-    else {
-      return .local
-    }
-  }
-}
-
 let package = Package(
   name: "GeoKit",
-  platforms: [.iOS(.v15), .macOS(.v11)],
+  platforms: [
+    .macOS(.v12),
+    .iOS(.v15)
+  ],
   products: [
     .library(
       name: "GeoKit",
-      targets: ["GeoKit"]),
+      targets: [
+        "GeoKit"
+      ]),
   ],
-  dependencies: [],
   targets: [
     .target(
       name: "GeoKit",
-      dependencies: []),
+      path: "Sources"
+    ),
     .testTarget(
       name: "GeoKitTests",
-      dependencies: ["GeoKit"]),
+      dependencies: [
+        "GeoKit"
+      ],
+      path: "Tests"
+    ),
   ]
 )
