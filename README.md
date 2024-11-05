@@ -38,7 +38,7 @@ In `Package.swift`, add the following to `dependencies` (for all available versi
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/andrewscwei/swift-geokit", from: "<version>")
+  .package(url: "https://github.com/andrewscwei/swift-geokit.git", from: "<version>")
 ]
 ```
 
