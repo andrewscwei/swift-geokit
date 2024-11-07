@@ -43,7 +43,6 @@ public protocol LocationServiceObserver: AnyObject {
 }
 
 extension LocationServiceObserver {
-  public func locationService(_ service: LocationService, locationDidChange newLocation: CLLocation) {}
   public func locationService(_ service: LocationService, headingDidChange newHeading: CLHeading) {}
   public func locationService(_ service: LocationService, locationUpdateDidTimeoutAfter timeout: TimeInterval) {}
   public func locationService(_ service: LocationService, locationUpdateDidFailWithError error: Error) {}
