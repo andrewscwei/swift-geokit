@@ -8,6 +8,7 @@ import CoreLocation
 /// - SeeAlso:
 ///   https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/LocationBestPractices.html#//apple_ref/doc/uid/TP40015243-CH24-SW1
 public class LocationService: NSObject {
+
   /// The most recently retrieved device location.
   public var currentLocation: CLLocation? { manager?.location }
 
@@ -90,6 +91,8 @@ public class LocationService: NSObject {
     self.manager?.pausesLocationUpdatesAutomatically = true
     self.manager?.activityType = .fitness
     self.manager?.delegate = self
+
+    _log.debug { "Starting location service... OK" }
   }
 
   /// Requests for permission to access the device location. The authorization
@@ -133,9 +136,12 @@ public class LocationService: NSObject {
     }
     else {
       switch authorizationStatus {
-      case .notDetermined, .restricted: manager?.requestAlwaysAuthorization()
-      case .denied: failureHandler(.denied)
-      case .authorized: break
+      case .notDetermined, .restricted:
+        manager?.requestAlwaysAuthorization()
+      case .denied:
+        failureHandler(.denied)
+      case .authorized:
+        break
       }
     }
   }
@@ -150,11 +156,13 @@ public class LocationService: NSObject {
     // Deactivate `LocationService` if authorization status is not allowed or if
     // update frequency is set to `never`.
     guard authorizationStatus == .authorized || authorizationStatus == .restricted, newUpdateFrequency != .never else {
-      timeoutTimer?.invalidate()
-      timeoutTimer = nil
       manager?.stopMonitoringSignificantLocationChanges()
       manager?.stopUpdatingLocation()
-      self.updateFrequency = .never
+
+      updateFrequency = .never
+
+      _log.error { "Changing update frequency to \(newUpdateFrequency)... ERR: Insufficient permissions, resetting to \(UpdateFrequency.never)" }
+
       return
     }
 
@@ -162,10 +170,11 @@ public class LocationService: NSObject {
     // `background`, which requires special attention.
     guard newUpdateFrequency != updateFrequency || newUpdateFrequency == .background else { return }
 
+    stopLocationUpdateTimer()
+
 #if os(iOS) || os(watchOS)
     manager?.stopUpdatingHeading()
 #endif
-
     manager?.stopUpdatingLocation()
     manager?.stopMonitoringSignificantLocationChanges()
 
@@ -195,14 +204,14 @@ public class LocationService: NSObject {
       break
     }
 
-    timeoutTimer?.invalidate()
-
     // Start anticipating for a timeout if the frequency is not `background`.
     if newUpdateFrequency != .background {
-      timeoutTimer = Timer.scheduledTimer(timeInterval: locationUpdateTimeoutInterval, target: self, selector: #selector(locationUpdateDidTimeout), userInfo: nil, repeats: false)
+      startLocationUpdateTimer()
     }
 
     updateFrequency = newUpdateFrequency
+
+    _log.debug { "Changing update frequency to \(newUpdateFrequency)... OK" }
   }
 
   /// Registers an observer.
@@ -222,11 +231,6 @@ public class LocationService: NSObject {
   }
 
 
-  /// Iteratively executes a block on each reigstered observer.
-  ///
-  /// - Parameters:
-  ///   - iteratee: The block to execute with each registered observer as the
-  ///               parameter.
   private func notifyObservers(iteratee: (LocationServiceObserver) -> Void) {
     for o in observers {
       guard let observer = o.get() else { continue }
@@ -234,10 +238,21 @@ public class LocationService: NSObject {
     }
   }
 
-  /// Handler invoked when the most recent location update attempt has timed out.
-  @objc private func locationUpdateDidTimeout() {
+  private func startLocationUpdateTimer() {
+    stopLocationUpdateTimer()
+    timeoutTimer = Timer.scheduledTimer(timeInterval: locationUpdateTimeoutInterval, target: self, selector: #selector(locationUpdateDidTimeout), userInfo: nil, repeats: false)
+  }
+
+  private func stopLocationUpdateTimer() {
     timeoutTimer?.invalidate()
     timeoutTimer = nil
+  }
+
+  @objc
+  private func locationUpdateDidTimeout() {
+    _log.error { "Updating location... ERR: Timed out after \(locationUpdateTimeoutInterval)s" }
+
+    stopLocationUpdateTimer()
 
     notifyObservers {
       $0.locationService(self, locationUpdateDidTimeoutAfter: locationUpdateTimeoutInterval)
@@ -248,13 +263,9 @@ public class LocationService: NSObject {
     // stop updating location.
     case .once:
       changeUpdateFrequency(.never)
-    // If the update frequency is continuous and a timeout occurred, prepare to
-    // capture the next update timeout.
-    case .loosely,
-         .always:
-      timeoutTimer = Timer.scheduledTimer(timeInterval: locationUpdateTimeoutInterval, target: self, selector: #selector(locationUpdateDidTimeout), userInfo: nil, repeats: false)
     // Otherwise do nothing.
-    default: break
+    default:
+      break
     }
   }
 }
@@ -262,6 +273,10 @@ public class LocationService: NSObject {
 extension LocationService: CLLocationManagerDelegate {
   public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     guard let newLocation = locations.last else { return }
+
+    _log.debug { "Updating location... OK: \(newLocation)" }
+
+    stopLocationUpdateTimer()
 
     switch updateFrequency {
     case .once:
@@ -281,16 +296,21 @@ extension LocationService: CLLocationManagerDelegate {
   }
 
   public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+    _log.debug { "Updating heading... OK: \(newHeading)" }
+
     notifyObservers {
       $0.locationService(self, headingDidChange: newHeading)
     }
   }
 
   public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    _log.debug { "Changing authorization status... OK: \(status)" }
+
     switch status {
     case .notDetermined:
       hasAlreadyRequestedForBackgroundAuthorization = false
-    default: break
+    default:
+      break
     }
 
     notifyObservers {
@@ -299,6 +319,8 @@ extension LocationService: CLLocationManagerDelegate {
   }
 
   public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    _log.error { "Updating location... ERR: \(error)" }
+
     notifyObservers {
       $0.locationService(self, locationUpdateDidFailWithError: error)
     }
