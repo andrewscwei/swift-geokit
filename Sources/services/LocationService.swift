@@ -161,7 +161,7 @@ public class LocationService: NSObject {
 
       updateFrequency = .never
 
-      _log.error { "Changing update frequency to \(newUpdateFrequency)... ERR: Insufficient permissions, resetting to \(UpdateFrequency.never)" }
+      _log.error { "Changing update frequency... ERR: Insufficient permissions, resetting to \(UpdateFrequency.never)" }
 
       return
     }
@@ -211,7 +211,7 @@ public class LocationService: NSObject {
 
     updateFrequency = newUpdateFrequency
 
-    _log.debug { "Changing update frequency to \(newUpdateFrequency)... OK" }
+    _log.debug { "Changing update frequency... OK: \(updateFrequency)" }
   }
 
   /// Registers an observer.
