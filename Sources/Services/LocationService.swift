@@ -214,6 +214,17 @@ public class LocationService: NSObject {
     _log.debug { "Changing update frequency... OK: \(updateFrequency)" }
   }
 
+  /// Invalidates the current placemark.
+  public func invalidatePlacemark() {
+    guard let location = currentLocation else { return }
+
+    CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
+      guard error == nil, let placemark = placemarks?.first else { return }
+
+      self.currentPlacemark = placemark
+    }
+  }
+
   /// Registers an observer.
   ///
   /// - Parameters:
@@ -229,7 +240,6 @@ public class LocationService: NSObject {
   public func removeObserver(_ observer: LocationServiceObserver) {
     observers = observers.filter { $0.get() as AnyObject !== observer as AnyObject }
   }
-
 
   private func notifyObservers(iteratee: (LocationServiceObserver) -> Void) {
     for o in observers {
@@ -248,8 +258,7 @@ public class LocationService: NSObject {
     timeoutTimer = nil
   }
 
-  @objc
-  private func locationUpdateDidTimeout() {
+  @objc private func locationUpdateDidTimeout() {
     _log.error { "Updating location... ERR: Timed out after \(locationUpdateTimeoutInterval)s" }
 
     stopLocationUpdateTimer()
@@ -283,11 +292,6 @@ extension LocationService: CLLocationManagerDelegate {
       changeUpdateFrequency(.never)
     default:
       break
-    }
-
-    CLGeocoder().reverseGeocodeLocation(newLocation) { placemarks, error in
-      guard error == nil, let placemark = placemarks?.first else { return }
-      self.currentPlacemark = placemark
     }
 
     notifyObservers {
