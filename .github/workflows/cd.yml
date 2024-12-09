@@ -15,8 +15,6 @@ jobs:
           bundler-cache: true
       - name: Set up Node
         uses: actions/setup-node@v4
-        with:
-          node-version: 21
       - name: Test
         run: bundle exec fastlane test
       - name: Release semantic version
